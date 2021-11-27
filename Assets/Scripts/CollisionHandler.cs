@@ -7,22 +7,57 @@ public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] private float respawnDelay = 1f;
     [SerializeField] private float levelLoadDelay = 3f;
+
     [SerializeField] AudioClip rocketCrash;
     [SerializeField] AudioClip success;
 
+    [SerializeField] ParticleSystem crashParticles;
+    [SerializeField] ParticleSystem successParticles;
+
     Movement movement;
     AudioSource audioSource;
+    CapsuleCollider capsuleCollider;
 
     private int currentScene;
+    private int nextScene;
+    private bool isTransitioning = false;
+    private bool collisionDisabled = false;
 
     private void Start()
     {
+        currentScene = SceneManager.GetActiveScene().buildIndex;
+        nextScene = currentScene + 1;
+
         movement = GetComponent<Movement>();
         audioSource = GetComponent<AudioSource>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
+    }
+
+    private void Update()
+    {
+        DebugOptions();
+    }
+
+    // Simple Debug
+    private void DebugOptions()
+    {
+        // currentScene = SceneManager.GetActiveScene().buildIndex;
+        // int nextScene = currentScene + 1;
+
+        if (Input.GetKey(KeyCode.L))
+        {
+            SceneManager.LoadScene(nextScene);
+        }
+        else if (Input.GetKey(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled; // toggle collision
+        }
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        if (isTransitioning || collisionDisabled) { return; }
+
         switch (other.gameObject.tag)
         {
             case "Friendly":
@@ -42,8 +77,9 @@ public class CollisionHandler : MonoBehaviour
 
     private void StartCrashSequence()
     {
-        // todo add particle system
-        // todo add SFX on crash
+        isTransitioning = true;
+        crashParticles.Play();
+        audioSource.Stop();
         audioSource.PlayOneShot(rocketCrash);
         movement.enabled = false;
         Invoke("ReloadLevel", respawnDelay);
@@ -51,6 +87,9 @@ public class CollisionHandler : MonoBehaviour
 
     private void StartNewLevelSequence()
     {
+        isTransitioning = true;
+        successParticles.Play();
+        audioSource.Stop();
         audioSource.PlayOneShot(success);
         movement.enabled = false;
         Invoke("LoadNextLevel", levelLoadDelay);
@@ -58,14 +97,14 @@ public class CollisionHandler : MonoBehaviour
 
     private void ReloadLevel()
     {
-        currentScene = SceneManager.GetActiveScene().buildIndex;
+        // currentScene = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentScene);
     }
 
     private void LoadNextLevel()
     {
-        currentScene = SceneManager.GetActiveScene().buildIndex;
-        int nextScene = currentScene + 1;
+        // currentScene = SceneManager.GetActiveScene().buildIndex;
+        // int nextScene = currentScene + 1;
         int lastScene = SceneManager.sceneCountInBuildSettings;
 
         if (nextScene == lastScene)
