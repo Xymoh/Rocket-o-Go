@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Over.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Under.unity
-    guid: 60699654bdebde34eaa4a20fc5028d75
+    path: Assets/Scenes/Moving Obstacle.unity
+    guid: 925889fc27c0f4041a7464efdf986d8b
   m_configObjects: {}
