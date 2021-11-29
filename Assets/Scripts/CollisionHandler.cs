@@ -10,12 +10,16 @@ public class CollisionHandler : MonoBehaviour
 
     [SerializeField] AudioClip rocketCrash;
     [SerializeField] AudioClip success;
+    [SerializeField] AudioClip fuelPickup;
 
     [SerializeField] ParticleSystem crashParticles;
     [SerializeField] ParticleSystem successParticles;
 
+    [SerializeField] GameObject audioController;
+
     Movement movement;
     AudioSource audioSource;
+    AudioSource fuelAudioSource;
     CapsuleCollider capsuleCollider;
 
     private int currentScene;
@@ -23,7 +27,7 @@ public class CollisionHandler : MonoBehaviour
     private bool isTransitioning = false;
     private bool collisionDisabled = false;
 
-    private void Start()
+    void Start()
     {
         currentScene = SceneManager.GetActiveScene().buildIndex;
         nextScene = currentScene + 1;
@@ -31,9 +35,10 @@ public class CollisionHandler : MonoBehaviour
         movement = GetComponent<Movement>();
         audioSource = GetComponent<AudioSource>();
         capsuleCollider = GetComponent<CapsuleCollider>();
+        fuelAudioSource = audioController.GetComponent<AudioSource>();
     }
 
-    private void Update()
+    void Update()
     {
         DebugOptions();
     }
@@ -41,15 +46,17 @@ public class CollisionHandler : MonoBehaviour
     // Simple Debug
     private void DebugOptions()
     {
-        // currentScene = SceneManager.GetActiveScene().buildIndex;
-        // int nextScene = currentScene + 1;
-
-        if (Input.GetKey(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L))
         {
+            Debug.Log("Changing Scene...");
+
             SceneManager.LoadScene(nextScene);
         }
-        else if (Input.GetKey(KeyCode.C))
+        else if (Input.GetKeyDown(KeyCode.C))
         {
+            if (collisionDisabled == true) { Debug.Log("Collision enabled"); }
+            else { Debug.Log("Collision disabled"); }
+
             collisionDisabled = !collisionDisabled; // toggle collision
         }
     }
@@ -63,14 +70,23 @@ public class CollisionHandler : MonoBehaviour
             case "Friendly":
                 Debug.Log("You are on starting platform");
                 break;
-            case "Fuel":
-                Debug.Log("You collected additional fuel");
-                break;
             case "Finish":
                 StartNewLevelSequence();
                 break;
             default:
                 StartCrashSequence();
+                break;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (isTransitioning || collisionDisabled) { return; }
+
+        switch (other.gameObject.tag)
+        {
+            case "Fuel":
+                StartFuelUpSequence(other);
                 break;
         }
     }
@@ -97,21 +113,22 @@ public class CollisionHandler : MonoBehaviour
 
     private void ReloadLevel()
     {
-        // currentScene = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentScene);
     }
 
     private void LoadNextLevel()
     {
-        // currentScene = SceneManager.GetActiveScene().buildIndex;
-        // int nextScene = currentScene + 1;
         int lastScene = SceneManager.sceneCountInBuildSettings;
 
-        if (nextScene == lastScene)
-        {
-            nextScene = 0;
-        }
+        if (nextScene == lastScene) { nextScene = 0; }
 
         SceneManager.LoadScene(nextScene);
+    }
+
+    private void StartFuelUpSequence(Collider other) 
+    {
+        movement.fuel = 100;
+        fuelAudioSource.PlayOneShot(fuelPickup);
+        other.gameObject.SetActive(false);
     }
 }

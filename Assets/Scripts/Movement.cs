@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float thrustForce = 1000f;
     [SerializeField] private float thrustRotation = 1f;
+    [SerializeField] public float fuel = 100f;
+
+    [SerializeField] Slider slider;
 
     [SerializeField] AudioClip mainEngine;
 
@@ -26,6 +30,7 @@ public class Movement : MonoBehaviour
     {
         ProcessThrust();
         ProcessRotate();
+        UpdateSliderValue();
     }
 
     private void ProcessThrust()
@@ -42,17 +47,29 @@ public class Movement : MonoBehaviour
 
     private void StartThrusting()
     {
-        // Move the rocket relatively to his top position
-        rb.AddRelativeForce(Vector3.up * thrustForce * Time.deltaTime);
+        fuel = fuel - 10 * Time.deltaTime;
 
-        // if the audio is currently not playing play the one shot of a mainengine sound
-        if (!audioSource.isPlaying) { audioSource.PlayOneShot(mainEngine); }
+        if (fuel > 0)
+        {
+            // Move the rocket relatively to his top position
+            rb.AddRelativeForce(Vector3.up * thrustForce * Time.deltaTime);
 
-        // if the mainthrustparticles are not playing play them
-        if (!mainThrustParticles.isPlaying) { mainThrustParticles.Play(); }
+            // if the audio is currently not playing play the one shot of a mainengine sound
+            if (!audioSource.isPlaying) { audioSource.PlayOneShot(mainEngine); }
+
+            // if the mainthrustparticles are not playing play them
+            if (!mainThrustParticles.isPlaying) { mainThrustParticles.Play(); }
+
+            // to be observed, might invoke some bugs
+            if (fuel < 0.1) { StopThrusting(); } 
+        }
+        else
+        {
+            fuel = 0;
+        }
     }
 
-        private void ProcessRotate()
+    private void ProcessRotate()
     {
         if (Input.GetKey(KeyCode.A)) { RotateLeft(); }
         else if (Input.GetKey(KeyCode.D)) { RotateRight(); }
@@ -94,5 +111,10 @@ public class Movement : MonoBehaviour
         rb.freezeRotation = true; // freezing rotation so we can manually rotate
         transform.Rotate(Vector3.forward * rotationDirection * Time.deltaTime);
         rb.freezeRotation = false; // unfreezing rotation so the physics system can take over
+    }
+
+    private void UpdateSliderValue() 
+    {
+        slider.value = fuel;
     }
 }
