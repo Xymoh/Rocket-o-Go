@@ -3,6 +3,9 @@ Unity project game for collecting finishing the levels with a crazy gravitation 
 
 # This is just a demo
 
+## Try by yourself!
+[Play!](https://sharemygame.com/@Cymoh/rocket-o-go)
+
 ## The game goal is to travel within Start and Finish while avoiding static and moving obstacles. The fun is within limited amount of the fuel and custom gravity.
 
 ## Controllers
@@ -13,9 +16,6 @@ Unity project game for collecting finishing the levels with a crazy gravitation 
 ## Debug
 - L to load next scene
 - C to disable collisions and explore the game.
-
-## Try by yourself!
-[Play!](https://sharemygame.com/@Cymoh/rocket-o-go)
 
 ## Assets & Packages used within game project:
 - Cinemachine
