@@ -4,28 +4,21 @@ Unity project game for collecting finishing the levels with a crazy gravitation 
 # This is just a demo
 
 ## Try by yourself!
-[Play!](https://sharemygame.com/@Cymoh/uruk-sahzal-assault)
+[Play!](https://sharemygame.com/@Cymoh/rocket-o-go)
 
-## The game goal is to destroy the invaders of the Uruk'Sahzal and score the highest possible highscore.
+## The game goal is to travel within Start and Finish while avoiding static and moving obstacles. The fun is within limited amount of the fuel and custom gravity.
 
 ## Controllers
-- A & D stand for Left & Right
-- W & S stand for Up & Down
-- LeftMouse for shooting
+- A & D for turning Left & Right
+- Space for boost
+- Escape for closing the game.
 
 ## Debug
+- L to load next scene
 - C to disable collisions and explore the game.
 
 ## Assets & Packages used within game project:
-- Post Processing
 - Cinemachine
-- [Terrain Tools](https://assetstore.unity.com/packages/tools/terrain/terrain-tools-64852)
-- TextMeshPro
-- Timeline
-- [Star Sparrow Modular Spaceship](https://assetstore.unity.com/packages/3d/vehicles/space/star-sparrow-modular-spaceship-73167)
-- [Skybox Volume 2 (Nebula)](https://assetstore.unity.com/packages/2d/textures-materials/sky/skybox-volume-2-nebula-3392)
-- [Sci-Fi Building-05](https://assetstore.unity.com/packages/3d/environments/sci-fi/sci-fi-building-05-185404)
-- [Gaia 2](https://assetstore.unity.com/packages/tools/terrain/gaia-2-terrain-scene-generator-42618)
 - [Low Poly Space Rocks](https://assetstore.unity.com/packages/3d/environments/sci-fi/low-poly-space-rocks-58385)
 - [Dynamic Space Background Lite](https://assetstore.unity.com/packages/2d/textures-materials/dynamic-space-background-lite-104606)
 
@@ -35,5 +28,4 @@ Unity project game for collecting finishing the levels with a crazy gravitation 
 - Add more levels
 - Add main menu and story mode
 - Add challenge mode
-- Add HighScore board
-- More type of enemies + Boss battles
+- Upgrade the game to be entirely low poly style of a game
